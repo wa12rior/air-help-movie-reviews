@@ -1,3 +1,4 @@
+import { useQueryHistoryStore } from "@/app/store/HistoryStore";
 import { Input } from "@/ui/input";
 import { Box, Button, Stack } from "@chakra-ui/react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -9,10 +10,15 @@ const ReviewSearch = () => {
   const router = useRouter();
   const query = searchParams.get("query") ?? undefined;
   const [search, setSearch] = useState(query);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const addEntry = useQueryHistoryStore((state) => state.addHistory);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.push(`/?query=${search}`);
+    if (search) {
+      addEntry({ query: search });
+    }
   };
 
   return (
@@ -22,9 +28,15 @@ const ReviewSearch = () => {
           <Input
             name="query"
             value={search}
+            onFocus={() => {
+              setHistoryOpen(true);
+            }}
+            onBlur={() => {
+              setHistoryOpen(false);
+            }}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <QueryHistory />
+          <QueryHistory active={historyOpen} />
         </Box>
         <Button type="submit">Search</Button>
       </Stack>

@@ -1,4 +1,5 @@
 import {
+  Box,
   Input as ChakraInput,
   InputProps as ChakraInputProps,
   Stack,
@@ -8,9 +9,16 @@ import { FC } from "react";
 
 export const Input: FC<ChakraInputProps> = (props) => {
   return (
-    <Stack direction="row" alignItems="center" maxWidth={"720px"}>
-      <Search width={16} height={16} />
-      <ChakraInput {...props} />
+    <Stack
+      direction="row"
+      alignItems="center"
+      maxWidth={"720px"}
+      position={"relative"}
+    >
+      <Box position={"absolute"} left={2}>
+        <Search width={16} height={16} />
+      </Box>
+      <ChakraInput {...props} pl={8} />
     </Stack>
   );
 };
